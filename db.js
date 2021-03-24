@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
 const connectDB =  () => {
-    mongoose.connect("MONGODB URI", {
+    mongoose.connect("MONGO_URI", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: false
+        useFindAndModify: false,
+        useCreateIndex: true
     }).then(() => {
-        console.log("Connected to database".blue);
+        console.log("Connected to database".blue.bold.underline);
     }).catch(() => {
         console.log("Connection Failed");
     });
