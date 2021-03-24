@@ -1,14 +1,20 @@
 const express = require('express');
-require('colors');
+const colors = require('colors');
+
+const connectDB = require("./db");
+const postsRouter = require("./routes/posts");
 
 const app = express();
+// Connect to database
+connectDB();
 
-app.get('/', (req, res, next) => {
-    res.status(200).json({success: true});
-})
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+// Handle Post requests
+app.use('/api/posts', postsRouter);
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`.cyan.bold);
+    console.log(`Listening on port ${PORT}`.yellow.bold);
 })
