@@ -7,6 +7,8 @@ exports.createUser = async (req, res, next) => {
         const hash = await bcrypt.hash(req.body.password, 10);
         const user = new User({
             email: req.body.email,
+            name: req.body.name,
+            username: req.body.username,
             password: hash
         });
         await user.save();
@@ -19,6 +21,14 @@ exports.createUser = async (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
     const users = await User.find();
     res.status(200).json(users);
+}
+exports.getUser = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id);
+        res.status(200).json(user);
+    } catch {
+        console.log(error);
+    }
 }
 
 exports.loginUser = async (req, res, next) => {
