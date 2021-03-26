@@ -1,5 +1,6 @@
 const express = require('express');
 const colors = require('colors');
+require('dotenv').config();
 
 const connectDB = require("./db");
 const cors = require('./middlewares/cors');
