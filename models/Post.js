@@ -8,7 +8,8 @@ const PostSchema = mongoose.Schema({
     content: {
         type: String, required: true
     },
-    creator: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    creatorName: String
 });
 
 module.exports = mongoose.model("Post", PostSchema);

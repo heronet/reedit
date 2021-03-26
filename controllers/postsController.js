@@ -1,4 +1,5 @@
 const Post = require("../models/Post");
+const User = require("../models/User");
 
 exports.getPosts = async (req, res, next) => {
     try {
@@ -32,12 +33,14 @@ exports.getPost = async (req, res, next) => {
     }
 }
 
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
     try {
+        const user = await User.findById(req.userData.userId);
         const post = new Post({
             title: req.body.title,
             content: req.body.content,
-            creator: req.userData.userId
+            creator: req.userData.userId,
+            creatorName: user.username
         });
         post.save().then((data) => {
             res.status(200).json({success: true, data});
