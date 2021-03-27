@@ -8,9 +8,9 @@ exports.getPosts = async (req, res, next) => {
         let postQuery;
 
         if(pageSize && currentPage) {
-            postQuery = await Post.find().skip(pageSize * (currentPage - 1)).limit(pageSize);
+            postQuery = await Post.find().sort({date: -1}).skip(pageSize * (currentPage - 1)).limit(pageSize);
         } else {
-            postQuery = await Post.find();
+            postQuery = await Post.find().sort({date: -1});
         }
         const posts = await postQuery;
         const count = await Post.countDocuments();
