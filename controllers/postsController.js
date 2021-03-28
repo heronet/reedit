@@ -7,8 +7,14 @@ exports.getPosts = async (req, res, next) => {
         const currentPage = +req.query.page;
         let postQuery;
 
+        // Post by a specific user
+
+        const poster = req.query.userId;
+
         if(pageSize && currentPage) {
             postQuery = await Post.find().sort({date: -1}).skip(pageSize * (currentPage - 1)).limit(pageSize);
+        } else if(poster) {
+            postQuery = await Post.find({creator: poster}).sort({date: -1});
         } else {
             postQuery = await Post.find().sort({date: -1});
         }
