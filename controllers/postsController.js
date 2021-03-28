@@ -42,16 +42,30 @@ exports.getPost = async (req, res, next) => {
 exports.createPost = async (req, res, next) => {
     try {
         const user = await User.findById(req.userData.userId);
-        const post = new Post({
-            title: req.body.title,
-            content: req.body.content,
-            creator: req.userData.userId,
-            creatorName: user.username
-        });
+        const url = req.protocol + '://' + req.get('host');
+        let post;
+        if(req.file) {
+            post = new Post({
+                title: req.body.title,
+                content: req.body.content,
+                creator: req.userData.userId,
+                creatorName: user.username,
+                imagePath: url + "/images/" + req.file.filename
+            });
+        } else {
+            post = new Post({
+                title: req.body.title,
+                content: req.body.content,
+                creator: req.userData.userId,
+                creatorName: user.username
+            });
+        }
+        
         post.save().then((data) => {
-            res.status(200).json({success: true, data});
+            res.status(200).json({success: true, data: {...data, id: data._id}});
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({success: false, message: "Creating post failed"});
     }
 }
@@ -73,7 +87,15 @@ exports.deletePost = async (req, res, next) => {
 
 exports.updatePost = async (req, res, next) => {
     const post = await Post.findById(req.params.id);
-    
+    const user = await User.findById(req.userData.userId);
+    let imagePath = req.body.imagePath;
+    req.body.creator = req.userData.userId;
+    req.body.username = user.username;
+    if(req.file) {
+        const url = req.protocol + '://' + req.get('host');
+        imagePath = url + "/images/" + req.file.filename
+        req.body.imagePath = imagePath;
+    }
     if(post.creator == req.userData.userId) {
         await post.updateOne(req.body);
         return res.status(201).json(post);

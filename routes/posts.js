@@ -10,6 +10,6 @@ router.route('/')
       .post(checkAuth, extractFile, createPost);
 router.route('/:id')
       .get(getPost)
-      .put(checkAuth, updatePost)
+      .put(checkAuth, extractFile, updatePost)
       .delete(checkAuth, deletePost);
 module.exports = router;
