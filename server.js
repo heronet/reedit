@@ -12,6 +12,8 @@ const app = express();
 // Connect to database
 connectDB();
 
+global.__basedir = __dirname;
+
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cors);
