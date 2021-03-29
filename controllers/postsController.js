@@ -1,6 +1,7 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
 const cloudinary = require('cloudinary').v2;
+const sharp = require('sharp');
 
 cloudinary.config({ 
   cloud_name: process.env.CLOUDINARY_NAME, 
@@ -52,8 +53,10 @@ exports.createPost = async (req, res, next) => {
         let post;
         if(req.file) {
             //const url = req.protocol + '://' + req.get('host') + "/images/" + req.file.filename;
-            const url = __basedir + "/images/" + req.file.filename;
-            await cloudinary.uploader.upload(url, (error, result) => {
+            const filePath = __basedir + "/images/" + req.file.filename;
+            let newFilePath = __basedir + "/images/" + 'converted-'+ req.file.filename;
+            await sharp(filePath).jpeg({quality: 50}).toFile(newFilePath);
+            await cloudinary.uploader.upload(newFilePath, (error, result) => {
                 post = new Post({
                     title: req.body.title,
                     content: req.body.content,
@@ -103,8 +106,10 @@ exports.updatePost = async (req, res, next) => {
     req.body.username = user.username;
     if(req.file) {
         //const url = req.protocol + '://' + req.get('host');
-        const url = __basedir + "/images/" + req.file.filename;
-        await cloudinary.uploader.upload(url, (error, result) => {
+        const filePath = __basedir + "/images/" + req.file.filename;
+        let newFilePath = __basedir + "/images/" + 'converted-'+ req.file.filename;
+        await sharp(filePath).jpeg({quality: 50}).toFile(newFilePath);
+        await cloudinary.uploader.upload(newFilePath, (error, result) => {
             imagePath = result.secure_url;
             req.body.imagePath = imagePath;
         });
