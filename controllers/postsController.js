@@ -116,3 +116,13 @@ exports.updatePost = async (req, res, next) => {
     }
     return res.status(401).json({message: "Not authorized"});
 }
+
+exports.addComment = async (req, res, next) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        await post.updateOne(req.body);
+        return res.status(201).json(post);
+    } catch (error) {
+        return res.status(401).json({message: "Not authorized"});
+    }
+}

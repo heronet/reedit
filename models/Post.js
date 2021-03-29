@@ -16,7 +16,8 @@ const PostSchema = mongoose.Schema({
     },
     imagePath: {
         type: String
-    }
+    },
+    comments: [{author: String, opinion: String}]
 });
 
 module.exports = mongoose.model("Post", PostSchema);

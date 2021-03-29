@@ -10,7 +10,8 @@ const UserSchema = mongoose.Schema({
         type: Array
     },
     job: String,
-    born: Date
+    born: Date,
+    avatar: String
 });
 
 UserSchema.plugin(mongooseUniqueValidator);
