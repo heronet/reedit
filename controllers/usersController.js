@@ -19,7 +19,15 @@ exports.createUser = async (req, res, next) => {
     }
 }
 exports.getUsers = async (req, res, next) => {
-    const users = await User.find();
+    let users;
+    if(req.query.search) {
+        const q_string = req.query.search;
+        const regex = new RegExp(q_string.split(' ')[0]);
+        users = await User.find({name: {$regex: regex}});
+    } else {
+        users = await User.find();
+    }
+    
     res.status(200).json(users);
 }
 exports.getUser = async (req, res, next) => {
