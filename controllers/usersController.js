@@ -22,7 +22,7 @@ exports.getUsers = async (req, res, next) => {
     let users;
     if(req.query.search) {
         const q_string = req.query.search;
-        const regex = new RegExp(q_string.split(' ')[0]);
+        const regex = new RegExp(q_string.split(' ')[0], 'i');
         users = await User.find({name: {$regex: regex}});
     } else {
         users = await User.find();
@@ -71,7 +71,7 @@ exports.loginUser = async (req, res, next) => {
                 return res.status(401).json({ message: "Auth failed" });
             }
             const token = jwt.sign({email: fetchedUser.email, userId: fetchedUser._id}, process.env.JWT_SECRET, { expiresIn: "1h" });
-            res.status(200).json({token, expiresIn: 3600, userId: fetchedUser._id, username: fetchedUser.username});
+            res.status(200).json({token, expiresIn: 36000, userId: fetchedUser._id, username: fetchedUser.username});
         })
         .catch(err => {
             return res.status(401).json({ message: "Invalid Credentials" });

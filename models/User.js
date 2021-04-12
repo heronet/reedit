@@ -11,7 +11,13 @@ const UserSchema = mongoose.Schema({
     },
     job: String,
     born: Date,
-    avatar: String
+    avatar: String,
+    // messages: [
+    //     {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'Message'
+    //     }
+    // ]
 });
 
 UserSchema.plugin(mongooseUniqueValidator);
