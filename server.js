@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require("http");
 const colors = require('colors');
 const cors = require('cors');
 require('dotenv').config();
@@ -10,6 +11,13 @@ const userRouter = require('./routes/user');
 const messagesRouter = require('./routes/messages');
 
 const app = express();
+const server = http.createServer(app);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: '*'
+    }
+});
+
 // Connect to database
 connectDB();
 
@@ -24,8 +32,14 @@ app.use('/api/posts', postsRouter);
 app.use('/api/users', userRouter);
 app.use('/api/messages', messagesRouter);
 
+
+io.on('connection', (socket) => {
+    require('./controllers/messagesController').emiter(socket);
+})
+
+
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`.yellow.bold.underline);
 })
