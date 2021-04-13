@@ -34,7 +34,7 @@ app.use('/api/messages', messagesRouter);
 
 
 io.on('connection', (socket) => {
-    require('./controllers/messagesController').emiter(socket);
+    require('./controllers/messagesController').emiter(io);
 })
 
 
