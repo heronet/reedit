@@ -12,12 +12,13 @@ const UserSchema = mongoose.Schema({
     job: String,
     born: Date,
     avatar: String,
-    // messages: [
-    //     {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'Message'
-    //     }
-    // ]
+    likes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Post',
+            unique: true
+        }
+    ]
 });
 
 UserSchema.plugin(mongooseUniqueValidator);

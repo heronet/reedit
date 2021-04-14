@@ -17,7 +17,14 @@ const PostSchema = mongoose.Schema({
     imagePath: {
         type: String
     },
-    comments: [{author: String, opinion: String}]
+    comments: [{author: String, opinion: String}],
+    likes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            unique: true
+        }
+    ]
 });
 
 module.exports = mongoose.model("Post", PostSchema);

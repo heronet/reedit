@@ -12,11 +12,7 @@ const messagesRouter = require('./routes/messages');
 
 const app = express();
 const server = http.createServer(app);
-const io = require('socket.io')(server, {
-    cors: {
-        origin: '*'
-    }
-});
+const io = require('./socket').init(server);
 
 // Connect to database
 connectDB();
@@ -34,7 +30,7 @@ app.use('/api/messages', messagesRouter);
 
 
 io.on('connection', (socket) => {
-    require('./controllers/messagesController').emiter(io);
+    console.log('User Connected');
 })
 
 

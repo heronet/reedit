@@ -1,10 +1,7 @@
 const Message = require("../models/Message")
-const User = require("../models/User")
+const User = require("../models/User");
+const { getIo } = require("../socket");
 
-let gio;
-exports.emiter = (io) => {
-    gio = io;
-}
 
 // api/messages
 exports.sendMessage = async (req, res, next) => {
@@ -23,7 +20,7 @@ exports.sendMessage = async (req, res, next) => {
 
         // await recipientUser.save();
         // await currentUser.save();
-        gio.emit("message", result);
+        getIo().emit("message", result);
         
         res.status(201).json(result);
     } catch (error) {

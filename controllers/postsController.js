@@ -1,7 +1,9 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
+const { getIo } = require("../socket");
 const cloudinary = require('cloudinary').v2;
 const sharp = require('sharp');
+
 
 cloudinary.config({ 
   cloud_name: process.env.CLOUDINARY_NAME, 
@@ -129,5 +131,61 @@ exports.addComment = async (req, res, next) => {
         return res.status(201).json(post);
     } catch (error) {
         return res.status(401).json({message: "Not authorized"});
+    }
+}
+
+// Likes 
+
+exports.likePost = async (req, res, next) => {
+    try {
+        const currentUser = await User.findById(req.userData.userId);
+        const likedPost = await Post.findById(req.params.id);
+        // TODO: Get the post -> add like to it -> save it
+
+
+        await likedPost.likes.unshift(currentUser);
+        await likedPost.save();
+        await currentUser.likes.unshift(likedPost);
+        
+        await currentUser.save();
+
+        getIo().emit("like", likedPost.likes.length);
+        
+        res.status(201).json({"success": true});
+    } catch (error) {
+        console.log(error);
+        res.status(400).json(error);
+    }
+}
+exports.unlikePost = async (req, res, next) => {
+    try {
+        const currentUser = await User.findById(req.userData.userId);
+        const likedPost = await Post.findById(req.params.id);
+
+        likedPost.likes = likedPost.likes.filter(item => item.toString() !== currentUser._id.toString());
+        
+        await likedPost.save();
+        currentUser.likes = currentUser.likes.filter(item => {
+            return item.toString() !== likedPost._id.toString();
+        });
+        await currentUser.save();
+        
+        getIo().emit("like", likedPost.likes.length);
+        
+        res.status(201).json({success: true});
+    } catch (error) {
+        console.log(error);
+        res.status(400).json(error);
+    }
+}
+
+exports.userLikes = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.userData.userId);
+        const likes = user.likes;
+
+        res.status(200).json(likes);
+    } catch (error) {
+        console.log(error);
     }
 }
