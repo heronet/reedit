@@ -149,9 +149,9 @@ exports.likePost = async (req, res, next) => {
         
         await currentUser.save();
 
-        getIo().emit("like", likedPost.likes.length);
+        // getIo().emit("like", likedPost.likes.length);
         
-        res.status(201).json({"success": true});
+        res.status(201).json({"success": true, likes: likedPost.likes.length});
     } catch (error) {
         console.log(error);
         res.status(400).json(error);
@@ -170,9 +170,9 @@ exports.unlikePost = async (req, res, next) => {
         });
         await currentUser.save();
         
-        getIo().emit("like", likedPost.likes.length);
+        // getIo().socket.emit("like", likedPost.likes.length);
         
-        res.status(201).json({success: true});
+        res.status(201).json({"success": true, likes: likedPost.likes.length});
     } catch (error) {
         console.log(error);
         res.status(400).json(error);
