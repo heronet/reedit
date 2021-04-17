@@ -57,7 +57,7 @@ exports.createPost = async (req, res, next) => {
             //const url = req.protocol + '://' + req.get('host') + "/images/" + req.file.filename;
             const filePath = __basedir + "/images/" + req.file.filename;
             let newFilePath = __basedir + "/images/" + 'converted-'+ req.file.filename;
-            await sharp(filePath).jpeg({quality: 50}).toFile(newFilePath);
+            await sharp(filePath).jpeg({quality: 40}).toFile(newFilePath);
             await cloudinary.uploader.upload(newFilePath, (error, result) => {
                 post = new Post({
                     title: req.body.title,
