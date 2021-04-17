@@ -64,7 +64,8 @@ exports.createPost = async (req, res, next) => {
                     content: req.body.content,
                     creator: req.userData.userId,
                     creatorName: user.username,
-                    imagePath: result.secure_url
+                    imagePath: result.secure_url,
+                    imagePuplicId: result.public_id
                 });
             });
         } else {
@@ -89,6 +90,11 @@ exports.deletePost = async (req, res, next) => {
     try {
         const post = await Post.findById(req.params.id);
         if(post.creator == req.userData.userId) {
+            if(post.imagePuplicId) {
+                await cloudinary.uploader.destroy(post.imagePuplicId, (error, result) => {
+                    console.log(result, error);
+                });
+            }
             await Post.findByIdAndDelete(req.params.id);
             return res.status(200).json(post);
         } else {

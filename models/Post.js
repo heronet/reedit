@@ -17,6 +17,7 @@ const PostSchema = mongoose.Schema({
     imagePath: {
         type: String
     },
+    imagePuplicId: String,
     comments: [{author: String, opinion: String}],
     likes: [
         {
