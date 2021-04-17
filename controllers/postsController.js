@@ -116,10 +116,12 @@ exports.updatePost = async (req, res, next) => {
         //const url = req.protocol + '://' + req.get('host');
         const filePath = __basedir + "/images/" + req.file.filename;
         let newFilePath = __basedir + "/images/" + 'converted-'+ req.file.filename;
-        await sharp(filePath).jpeg({quality: 50}).toFile(newFilePath);
+        await sharp(filePath).jpeg({quality: 40}).toFile(newFilePath);
         await cloudinary.uploader.upload(newFilePath, (error, result) => {
             imagePath = result.secure_url;
+            imagePuplicId = result.public_id;
             req.body.imagePath = imagePath;
+            req.body.imagePuplicId = imagePuplicId;
         });
         //imagePath = url + "/images/" + req.file.filename
     }
