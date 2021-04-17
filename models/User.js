@@ -15,8 +15,7 @@ const UserSchema = mongoose.Schema({
     likes: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Post',
-            unique: true
+            ref: 'Post'
         }
     ]
 });

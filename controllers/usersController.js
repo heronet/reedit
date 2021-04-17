@@ -12,7 +12,9 @@ exports.createUser = async (req, res, next) => {
             password: hash
         });
         await user.save();
-        res.status(201).json({message: "User Created", user});
+        // res.status(201).json({message: "User Created", user});
+        const token = jwt.sign({email: user.email, userId: user._id}, process.env.JWT_SECRET);
+        res.status(200).json({token, userId: user._id, username: user.username});
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "Invalid Credentials"});
