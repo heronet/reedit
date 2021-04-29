@@ -72,7 +72,20 @@ exports.getInbox = async (req, res, next) => {
             if(each.recipient.username === currentUser.username)
                 inbox[each.sender.username] = each;
         }
-        res.status(200).json(inbox);
+        let new_inbox = []
+        for(key in inbox) {
+            let old_msg = inbox[key]
+            let msg = {
+                _id: old_msg._id,
+                text: old_msg.text,
+                sender: old_msg.sender,
+                recipient: old_msg.recipient,
+                createdAt: old_msg.createdAt,
+                displayName: key
+            }
+            new_inbox.push(msg)
+        }
+        res.status(200).json(new_inbox);
     } catch (error) {
         console.log(error);
     }
