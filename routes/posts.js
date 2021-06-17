@@ -13,7 +13,7 @@ router.route('/:id')
       .put(checkAuth, extractFile, updatePost)
       .delete(checkAuth, deletePost);
 router.route('/:id/comment')
-      .post(checkAuth, addComment)
+      .patch(checkAuth, addComment)
 router.route('/:id/like')
       .post(checkAuth, likePost)
 router.route('/:id/unlike')
