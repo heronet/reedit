@@ -24,7 +24,7 @@ exports.getUsers = async (req, res, next) => {
     let users;
     if(req.query.search) {
         const q_string = req.query.search;
-        const regex = new RegExp(q_string.split(' ')[0], 'i');
+        const regex = new RegExp(q_string, 'i');
         users = await User.find({name: {$regex: regex}});
     } else {
         users = await User.find();
